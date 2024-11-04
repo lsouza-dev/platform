@@ -10,12 +10,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheckPoint;
     [SerializeField] private Animator animator;
+    [SerializeField] private SpriteRenderer spRenderer;
     // Mascara de layer que será usada para verificar a colisão
     // entre os objetos
     [SerializeField] private LayerMask whatIsGround;
 
     [Header("Player Variables")]
     [SerializeField] float xInput;
+    [SerializeField] float ySpeed;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float activeSpeed;
     [SerializeField] private float runSpeed;
@@ -26,8 +28,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Animation Controllers")]
     [SerializeField] private bool idle;
+    [SerializeField] private int jumpCount = 0;
     [SerializeField] private bool run;
-    [SerializeField] private bool jump;
+    [SerializeField] private bool runFastest;
     [SerializeField] private bool fall;
     [SerializeField] private bool doubleJump;
     [SerializeField] private bool hit;
@@ -38,10 +41,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
-    }
-    void Start()
-    {
-        
+        spRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -50,15 +50,25 @@ public class PlayerController : MonoBehaviour
         // Se o raio do groundCheckpoint do player estiver colidindo com a 
         // layer ground, a variável receberá true
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
+        if (isGrounded) jumpCount = 0;
 
         xInput = Input.GetAxis("Horizontal");
+        ySpeed = rb.velocity.y;
 
         if (xInput != 0) idle = false;
         else idle = true;
 
+        if (xInput < 0) spRenderer.flipX = true;
+        else spRenderer.flipX = false;
+
         activeSpeed = moveSpeed;
 
-        if (Input.GetKey(KeyCode.LeftControl)) activeSpeed = runSpeed;
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            activeSpeed = runSpeed;
+            runFastest = true;
+        }else runFastest = false;
+
         rb.velocity = new Vector2(xInput * activeSpeed, rb.velocity.y);
         
         
@@ -88,24 +98,25 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
+        jumpCount++;
         rb.velocity = new Vector2(rb.velocity.x, jumpForce);
     }
 
     private void SetAnimations()
     {
-        animator.SetFloat("speed",xInput);
         animator.SetBool("idle", idle);
-        animator.SetBool("run", run);
-        animator.SetBool("jump", jump);
-        animator.SetBool("doubleJump", doubleJump);
         animator.SetBool("hit", hit);
+        animator.SetFloat("speed",xInput);
+        animator.SetBool("runFastest", runFastest);
+        animator.SetFloat("ySpeed", ySpeed);
+        animator.SetInteger("jumpCount", jumpCount);
+        animator.SetBool("isGrounded", isGrounded);
     }
 
     private void RestartPlayerAnimations()
     {
         idle = true;
         run = false;
-        jump = false;
         doubleJump = false;
         hit = false;
     }
