@@ -238,7 +238,12 @@ MonoBehaviour:
   runSpeed: 12
   jumpForce: 20
   isGrounded: 0
-  groundCheckPoint: {fileID: 0}
+  canDoubleJump: 0
+  groundCheckPoint: {fileID: 527665787}
+  groundCheckRadius: 0.2
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
