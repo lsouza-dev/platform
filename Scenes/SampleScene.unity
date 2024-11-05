@@ -233,17 +233,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
+  groundCheckPoint: {fileID: 527665787}
+  animator: {fileID: 0}
+  spRenderer: {fileID: 0}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 128
+  xInput: 0
+  ySpeed: 0
   moveSpeed: 8
   activeSpeed: 0
   runSpeed: 12
   jumpForce: 20
   isGrounded: 0
   canDoubleJump: 0
-  groundCheckPoint: {fileID: 527665787}
   groundCheckRadius: 0.2
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 128
+  idle: 0
+  jumpCount: 0
+  run: 0
+  runFastest: 0
+  fall: 0
+  doubleJump: 0
+  hit: 0
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

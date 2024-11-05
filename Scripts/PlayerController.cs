@@ -58,8 +58,14 @@ public class PlayerController : MonoBehaviour
         if (xInput != 0) idle = false;
         else idle = true;
 
-        if (xInput < 0) spRenderer.flipX = true;
-        else spRenderer.flipX = false;
+        if (xInput < 0)
+        {
+            transform.localScale = new Vector3(-1f,transform.localScale.y,transform.localScale.z);
+        }
+        else if (xInput > 0) 
+        {
+            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+        }
 
         activeSpeed = moveSpeed;
 
