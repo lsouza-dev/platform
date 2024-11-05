@@ -106,9 +106,9 @@ public class PlayerController : MonoBehaviour
     {
         animator.SetBool("idle", idle);
         animator.SetBool("hit", hit);
-        animator.SetFloat("speed",xInput);
+        animator.SetFloat("speed", Mathf.Abs(xInput));
         animator.SetBool("runFastest", runFastest);
-        animator.SetFloat("ySpeed", ySpeed);
+        animator.SetFloat("ySpeed", Mathf.Abs(ySpeed));
         animator.SetInteger("jumpCount", jumpCount);
         animator.SetBool("isGrounded", isGrounded);
     }
