@@ -7,24 +7,6 @@ public class TreelineMover : MonoBehaviour
     [SerializeField] private float maxDistance;
     [SerializeField] private float xOffset;
 
-    //[SerializeField] private Transform player; // Referência ao player
-    //[SerializeField] private Transform cameraTransform; // Referência à câmera
-    //[SerializeField] private float xMin;
-    //[SerializeField] private float xMax;
-
-    //private void Awake()
-    //{
-    //    player = FindObjectOfType<PlayerController>().GetComponent<Transform>();
-    //    cameraTransform = Camera.main.transform;
-    //}
-
-    //private void Update()
-    //{
-    //    if (transform.position.x - xMin < cameraTransform.position.x)
-    //    {
-    //        transform.position = new Vector2(GetNextXPosition(), transform.position.y);
-    //    }
-    //}
 
     private void Update()
     {
@@ -44,22 +26,4 @@ public class TreelineMover : MonoBehaviour
             transform.position += new Vector3(maxDistance * xOffset, 0f, 0f);
         }
     }
-
-    //private float GetNextXPosition()
-    //{
-    //    float maxX = cameraTransform.position.x + xMax;
-
-    //    // Verifica se existem outros arbustos à frente e ajusta a posição para evitar sobreposição
-    //    foreach (TreelineMover otherBush in FindObjectsOfType<TreelineMover>())
-    //    {
-    //        if (otherBush != this && otherBush.transform.position.x > transform.position.x)
-    //        {
-    //            maxX = Mathf.Max(maxX, otherBush.transform.position.x + xMax);
-    //        }
-    //    }
-
-    //    return maxX;
-    //}
-
-
 }

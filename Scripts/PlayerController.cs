@@ -33,7 +33,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool runFastest;
     [SerializeField] private bool fall;
     [SerializeField] private bool doubleJump;
-    [SerializeField] private bool hit;
 
     
 
@@ -111,7 +110,6 @@ public class PlayerController : MonoBehaviour
     private void SetAnimations()
     {
         animator.SetBool("idle", idle);
-        animator.SetBool("hit", hit);
         animator.SetFloat("speed", Mathf.Abs(xInput));
         animator.SetBool("runFastest", runFastest);
         animator.SetFloat("ySpeed", Mathf.Abs(ySpeed));
@@ -119,11 +117,11 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
     }
 
-    private void RestartPlayerAnimations()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        idle = true;
-        run = false;
-        doubleJump = false;
-        hit = false;
+        if (other.CompareTag("Obstacle"))
+        {
+            animator.SetTrigger("hit");
+        }
     }
 }
