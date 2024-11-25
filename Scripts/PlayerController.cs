@@ -123,5 +123,10 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("hit");
         }
+
+        if (other.CompareTag("Hearth"))
+        {
+            PlayerHealthController.instance.LifeRestore();
+        }
     }
 }
