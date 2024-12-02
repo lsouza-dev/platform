@@ -9,7 +9,7 @@ public class PlayerHealthController : MonoBehaviour
     [SerializeField] private int currentHealth;
 
     [SerializeField] private float invicibilityLenght;
-    [SerializeField] private float invicibilityCounter;
+    [SerializeField] public float invicibilityCounter;
 
     public static PlayerHealthController instance;
 
@@ -23,10 +23,20 @@ public class PlayerHealthController : MonoBehaviour
         currentHealth = maxHealth;
     }
 
+    private void Update()
+    {
+        if (invicibilityCounter > 0) invicibilityCounter -= Time.deltaTime;
+    }
+
     public void DamagePlayer() {
-        currentHealth--;
-        UIController.instance.UpdateHealthDisplay(currentHealth,maxHealth);
-        if (currentHealth <= 0) gameObject.SetActive(false);
+        if(invicibilityCounter <= 0)
+        {
+            invicibilityCounter = invicibilityLenght;
+            currentHealth--;
+            UIController.instance.UpdateHealthDisplay(currentHealth, maxHealth);
+            if (currentHealth <= 0) gameObject.SetActive(false);
+
+        }
     }
 
     public void LifeRestore()

@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Obstacle"))
         {
-            animator.SetTrigger("hit");
+            if(PlayerHealthController.instance.invicibilityCounter <= 0) animator.SetTrigger("hit");
         }
 
         if (other.CompareTag("Hearth"))
