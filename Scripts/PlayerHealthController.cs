@@ -11,11 +11,17 @@ public class PlayerHealthController : MonoBehaviour
     [SerializeField] private float invicibilityLenght;
     [SerializeField] public float invicibilityCounter;
 
+    [Header("Sprite Variables")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Color normalColor;
+    [SerializeField] private Color fadeColor;
+
     public static PlayerHealthController instance;
 
     private void Awake()
     {
         if(instance == null) instance = this;
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void Start()
@@ -25,18 +31,34 @@ public class PlayerHealthController : MonoBehaviour
 
     private void Update()
     {
-        if (invicibilityCounter > 0) invicibilityCounter -= Time.deltaTime;
+        if (invicibilityCounter > 0)
+        {
+            invicibilityCounter -= Time.deltaTime;
+
+            if (invicibilityCounter <= 0) spriteRenderer.color = normalColor;
+        } 
     }
 
     public void DamagePlayer() {
-        if(invicibilityCounter <= 0)
+
+        if (invicibilityCounter <= 0)
         {
-            invicibilityCounter = invicibilityLenght;
             currentHealth--;
-            UIController.instance.UpdateHealthDisplay(currentHealth, maxHealth);
-            if (currentHealth <= 0) gameObject.SetActive(false);
+
+            if (currentHealth <= 0)
+            {
+                gameObject.SetActive(false);
+                currentHealth = 0;
+            }
+            else
+            {
+                spriteRenderer.color = fadeColor;
+                invicibilityCounter = invicibilityLenght;
+            }
 
         }
+       
+        UIController.instance.UpdateHealthDisplay(currentHealth, maxHealth);
     }
 
     public void LifeRestore()

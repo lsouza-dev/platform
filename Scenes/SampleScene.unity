@@ -23427,8 +23427,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 3
   currentHealth: 0
-  invicibilityLenght: 3
+  invicibilityLenght: 2
   invicibilityCounter: 0
+  spriteRenderer: {fileID: 0}
+  normalColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeColor: {r: 0.6698113, g: 0.16745283, b: 0.16745283, a: 0.69411767}
 --- !u!1 &426513807
 GameObject:
   m_ObjectHideFlags: 0

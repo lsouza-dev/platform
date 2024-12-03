@@ -34,14 +34,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool fall;
     [SerializeField] private bool doubleJump;
 
-    [Header("Sprite Variables")]
-    [SerializeField] private Color normalColor;
-    [SerializeField] private Color fadeColor;
-
 
     private void Awake()
     {
-        spRenderer = GetComponentInChildren<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         spRenderer = GetComponentInChildren<SpriteRenderer>();
