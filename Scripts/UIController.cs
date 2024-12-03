@@ -26,22 +26,6 @@ public class UIController : MonoBehaviour
         
     }
 
-    //public void UpdateHealthDisplay()
-    //{
-
-    //    int index = hearths.Count - 1;
-    //    hearths.ForEach(h =>
-    //    {
-    //        if (!h.gameObject.active)
-    //        {
-    //            index--;
-    //        }
-
-    //    });
-    //    hearths[index].gameObject.SetActive(false);
-
-    //}
-
     public void UpdateHealthDisplay(int health,int maxHealth)
     {
         for(int i = 0; i < hearths.Count; i++)

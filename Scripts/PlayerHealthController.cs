@@ -8,7 +8,7 @@ public class PlayerHealthController : MonoBehaviour
     [SerializeField] private int maxHealth;
     [SerializeField] private int currentHealth;
 
-    [SerializeField] private float invicibilityLenght;
+    [SerializeField] public float invicibilityLenght;
     [SerializeField] public float invicibilityCounter;
 
     [Header("Sprite Variables")]

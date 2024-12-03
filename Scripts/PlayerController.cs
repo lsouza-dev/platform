@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -34,6 +35,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private bool fall;
     [SerializeField] private bool doubleJump;
 
+    public bool isKnockBack = false;
 
     private void Awake()
     {
@@ -50,53 +52,60 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheckPoint.position, groundCheckRadius, whatIsGround);
         if (isGrounded) jumpCount = 0;
 
-        xInput = Input.GetAxis("Horizontal");
-        ySpeed = rb.velocity.y;
-
-        if (xInput != 0) idle = false;
-        else idle = true;
-
-        if (xInput < 0)
+        if (!isKnockBack)
         {
-            transform.localScale = new Vector3(-1f,transform.localScale.y,transform.localScale.z);
-        }
-        else if (xInput > 0) 
-        {
-            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
-        }
+            xInput = Input.GetAxis("Horizontal");
+            bool yInput = Input.GetButtonDown("Jump");
 
-        activeSpeed = moveSpeed;
+            ySpeed = rb.velocity.y;
 
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            activeSpeed = runSpeed;
-            runFastest = true;
-        }else runFastest = false;
+            if (xInput != 0) idle = false;
+            else idle = true;
 
-        rb.velocity = new Vector2(xInput * activeSpeed, rb.velocity.y);
-        
-        
-        bool yInput = Input.GetButtonDown("Jump");
-        if(yInput)
-        {
-            // Se está no chão
-            if (isGrounded)
+            if (xInput < 0)
             {
-                // Pula e habilita doubleJump
-                Jump();
-                canDoubleJump = true;
+                transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
             }
-            else
+            else if (xInput > 0)
             {
-                // Se puder usar o double jump
-                if (canDoubleJump)
+                transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+            }
+
+            activeSpeed = moveSpeed;
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                activeSpeed = runSpeed;
+                runFastest = true;
+            }
+            else runFastest = false;
+
+            rb.velocity = new Vector2(xInput * activeSpeed, rb.velocity.y);
+
+
+            
+            if (yInput)
+            {
+                // Se está no chão
+                if (isGrounded)
                 {
-                    // Pula novamente e desativa o double jump
+                    // Pula e habilita doubleJump
                     Jump();
-                    canDoubleJump= false;
+                    canDoubleJump = true;
+                }
+                else
+                {
+                    // Se puder usar o double jump
+                    if (canDoubleJump)
+                    {
+                        // Pula novamente e desativa o double jump
+                        Jump();
+                        canDoubleJump = false;
+                    }
                 }
             }
         }
+
         SetAnimations();
     }
 
@@ -116,11 +125,23 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("isGrounded", isGrounded);
     }
 
+    public void KnockBack()
+    {
+        isKnockBack = true;
+
+        Vector2 knockBackDir = Vector2.zero;
+        float knockBackJump = jumpForce * .5f;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Obstacle"))
         {
-            if(PlayerHealthController.instance.invicibilityCounter <= 0) animator.SetTrigger("hit");
+            if (PlayerHealthController.instance.invicibilityCounter <= 0)
+            {
+                animator.SetTrigger("hit");
+                isKnockBack = true;
+            }
         }
 
         if (other.CompareTag("Hearth"))
