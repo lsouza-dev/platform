@@ -37,8 +37,12 @@ public class PlayerController : MonoBehaviour
 
     public bool isKnockBack = false;
 
+    public static PlayerController instance;
+
     private void Awake()
     {
+        if(instance == null) instance = this;
+
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         spRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -129,8 +133,20 @@ public class PlayerController : MonoBehaviour
     {
         isKnockBack = true;
 
-        Vector2 knockBackDir = Vector2.zero;
         float knockBackJump = jumpForce * .5f;
+        Vector2 knockBackDir = new Vector2(rb.velocity.x * -.5f, knockBackJump);
+
+
+        if (rb.velocity.x > 0)
+        {
+            rb.velocity = knockBackDir;
+
+        }
+        if (rb.velocity.x < 0)
+        {
+            rb.velocity = knockBackDir;
+        }
+        StartCoroutine(EndKockback());
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -140,13 +156,19 @@ public class PlayerController : MonoBehaviour
             if (PlayerHealthController.instance.invicibilityCounter <= 0)
             {
                 animator.SetTrigger("hit");
-                isKnockBack = true;
+                KnockBack();
             }
         }
 
         if (other.CompareTag("Hearth"))
         {
-            PlayerHealthController.instance.LifeRestore();
+            PlayerHealthController.instance.LifeRestore(1);
         }
+    }
+
+    public IEnumerator EndKockback()
+    {
+        yield return new WaitForSeconds(.7f);
+        isKnockBack = false;
     }
 }

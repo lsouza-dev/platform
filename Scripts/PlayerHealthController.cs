@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealthController : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class PlayerHealthController : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        UIController.instance.UpdateHealthDisplay(currentHealth, currentHealth);
     }
 
     private void Update()
@@ -36,7 +38,13 @@ public class PlayerHealthController : MonoBehaviour
             invicibilityCounter -= Time.deltaTime;
 
             if (invicibilityCounter <= 0) spriteRenderer.color = normalColor;
-        } 
+        }
+
+#if UNITY_EDITOR
+
+        if (Input.GetKeyDown(KeyCode.H)) LifeRestore(1);
+        if (Input.GetKeyDown(KeyCode.R)) SceneManager.LoadScene(0);
+#endif
     }
 
     public void DamagePlayer() {
@@ -56,16 +64,18 @@ public class PlayerHealthController : MonoBehaviour
                 invicibilityCounter = invicibilityLenght;
             }
 
+            PlayerController.instance.EndKockback();
+
         }
        
         UIController.instance.UpdateHealthDisplay(currentHealth, maxHealth);
     }
 
-    public void LifeRestore()
+    public void LifeRestore(int healthAmount)
     {
         if (currentHealth < maxHealth)
         {
-            currentHealth++;
+            currentHealth += healthAmount;
             UIController.instance.UpdateHealthDisplay(currentHealth, maxHealth);
         }
         else print("VIDA MÁXIMA");   
